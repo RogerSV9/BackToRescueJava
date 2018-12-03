@@ -27,4 +27,8 @@ public interface BTRManager {
 
     void AddObject(String usernme, String name, String image);
 
+    /**Map*/
+
+    String getLevelData(int level);
+
 }

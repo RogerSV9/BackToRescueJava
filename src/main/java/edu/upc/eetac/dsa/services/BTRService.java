@@ -1,6 +1,7 @@
 package edu.upc.eetac.dsa.services;
 
 import edu.upc.eetac.dsa.*;
+import edu.upc.eetac.dsa.Character;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -54,6 +55,40 @@ public class BTRService {
             e.printStackTrace();
             return Response.status(404).build();
         }
+    }
+
+    @POST
+    @ApiOperation(value = "Login", notes = "asdasd")
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "Successful", response= Character.class),
+            @ApiResponse(code = 404, message = "User not found")
+    })
+
+    @Path("/login")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response Login(User user) {
+        try {
+            Character charact = this.bm.UserLogin(user.getUsername(), user.getPassword());
+            GenericEntity<Character> entity = new GenericEntity<Character>(charact){};
+            return Response.status(200).entity(entity).build();
+        } catch (UserNotFoundException e) {
+            e.printStackTrace();
+            return Response.status(404).build();
+        }
+    }
+
+    @POST
+    @ApiOperation(value = "GetLevelData", notes = "asdasd")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Successful", response= Character.class)
+    })
+
+    @Path("/level/{level}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response getLevelData(@PathParam("level") int level) {
+        String game = bm.getLevelData(level);
+        GenericEntity<String> entity = new GenericEntity<String>(game){};
+        return Response.status(200).entity(entity).build();
     }
 
 }

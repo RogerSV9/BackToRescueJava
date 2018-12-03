@@ -12,6 +12,7 @@ public class BTRManagerImpl implements BTRManager {
     private HashMap<String,User> users;
     private List<Objeto> objects;
     private List<Character> characters;
+    private String[] levels;
 
     public static BTRManager getInstance(){
         if(instance == null){
@@ -24,6 +25,7 @@ public class BTRManagerImpl implements BTRManager {
         users = new HashMap<>();
         objects = new ArrayList<>();
         characters = new ArrayList<>();
+        levels = new String[10];
     }
 
     @Override
@@ -115,6 +117,11 @@ public class BTRManagerImpl implements BTRManager {
     @Override
     public void AddObject(String username, String name, String image) {
         objects.add(new Objeto(username, name, image));
+    }
+
+    @Override
+    public String getLevelData(int level) {
+        return levels[level-1];
     }
 
 }
