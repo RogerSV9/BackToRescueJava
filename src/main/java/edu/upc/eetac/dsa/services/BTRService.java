@@ -149,4 +149,18 @@ public class BTRService {
             return Response.status(404).build();
         }
     }
+
+    @POST
+    @ApiOperation(value = "Sign-in", notes = "asdasd")
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "Successful"),
+            @ApiResponse(code = 404, message = "User not found")
+    })
+
+    @Path("/addobject}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response Signin(Objeto objeto) {
+        bm.AddObject(objeto.getUsername(),objeto.getName(),objeto.getImage());
+        return Response.status(201).build();
+    }
 }
