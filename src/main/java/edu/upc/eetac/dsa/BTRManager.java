@@ -15,6 +15,8 @@ public interface BTRManager {
 
     void LogOut(String username, Character character);
 
+    void AddCharacter(String username, int health, int mana, int damage, int defense, int level, double money);
+
     /**States*/
 
     Character GetStats(String username);

@@ -86,6 +86,11 @@ public class BTRManagerImpl implements BTRManager {
     }
 
     @Override
+    public void AddCharacter(String username, int health, int mana, int damage, int defense, int level, double money) {
+        characters.add(new Character(username, health, mana, damage, defense, level, money));
+    }
+
+    @Override
     public Character GetStats(String username) {
         return null;
     }
@@ -123,5 +128,7 @@ public class BTRManagerImpl implements BTRManager {
     public String getLevelData(int level) {
         return levels[level-1];
     }
+
+
 
 }

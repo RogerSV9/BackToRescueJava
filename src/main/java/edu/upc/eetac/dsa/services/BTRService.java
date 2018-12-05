@@ -6,6 +6,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import org.apache.log4j.Logger;
 
 import javax.inject.Singleton;
 import javax.ws.rs.*;
@@ -20,8 +21,8 @@ import static edu.upc.eetac.dsa.BTRManagerImpl.getInstance;
 
 @Api(value = "/service", description = "Endpoint to BTR Service")
 @Path("/service")
-@Singleton
 public class BTRService {
+    final static Logger log = Logger.getLogger(BTRService.class.getName());
     private BTRManager bm;
 
     public BTRService(){
@@ -29,6 +30,7 @@ public class BTRService {
         bm.UserRegistration("Laia","munoz");
         bm.AddObject("Laia","Sword","sword.jpg");
         bm.AddObject("Laia","Gold","gold.jpg");
+        bm.AddCharacter("Laia",100,100,50,50,2,999);
     }
     @GET
     @Path("/Hello")
@@ -64,11 +66,15 @@ public class BTRService {
             @ApiResponse(code = 404, message = "User not found")
     })
 
-    @Path("/login")
-    @Consumes(MediaType.APPLICATION_JSON)
-    public Response Login(User user) {
+    @Path("/login/{user}/{password}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response Login(@PathParam("user") String user, @PathParam("password") String password) {
         try {
-            Character charact = this.bm.UserLogin(user.getUsername(), user.getPassword());
+            Character charact = this.bm.UserLogin(user, password);
+            if(charact != null){
+                log.info("charac es diferent de null");
+            }
+            else{log.info("charac es null");}
             GenericEntity<Character> entity = new GenericEntity<Character>(charact){};
             return Response.status(200).entity(entity).build();
         } catch (UserNotFoundException e) {
@@ -80,13 +86,14 @@ public class BTRService {
     @POST
     @ApiOperation(value = "GetLevelData", notes = "asdasd")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Successful", response= Character.class)
+            @ApiResponse(code = 200, message = "Successful", response= String.class)
     })
 
     @Path("/level/{level}")
-    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.TEXT_PLAIN)
     public Response getLevelData(@PathParam("level") int level) {
         String game = bm.getLevelData(level);
+        //game = "Game";
         GenericEntity<String> entity = new GenericEntity<String>(game){};
         return Response.status(200).entity(entity).build();
     }
