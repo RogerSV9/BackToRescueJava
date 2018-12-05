@@ -31,9 +31,9 @@ public class BTRManagerImpl implements BTRManager {
     @Override
     public void UserRegistration(String username, String password) {
         User user = users.get(username);
-        if(user == null){
-            User newuser = new User(username, password);
-            users.put(username,newuser);
+        if(user == null) {
+            users.put(username,new User(username,password));
+            AddCharacter(username,100,100,50,50,2,999);
         }
         else{
             log.error("User is already in the system");
@@ -66,10 +66,14 @@ public class BTRManagerImpl implements BTRManager {
     @Override
     public void UserDelete(String username, String password) throws UserNotFoundException{
         User user = users.get(username);
-        Character c = null;
         if(user != null) {
             if (user.getPassword().equals(password)) {
-                users.remove(username);
+                this.users.remove(username);
+                for(int i = 0; i< this.characters.size(); i++) {
+                    if(username.equals(this.characters.get(i).getUsername())){
+                        this.characters.remove(i);
+                    }
+                }
             } else {
                 log.error("Incorrect password");
             }
@@ -81,8 +85,8 @@ public class BTRManagerImpl implements BTRManager {
     }
 
     @Override
-    public void LogOut(String username, Character character) {
-        UpdateStats(username, character);
+    public void LogOut(Character character) {
+        UpdateStats(character);
     }
 
     @Override
@@ -91,13 +95,30 @@ public class BTRManagerImpl implements BTRManager {
     }
 
     @Override
-    public Character GetStats(String username) {
-        return null;
+    public Character GetStats(String username) throws UserNotFoundException{
+        User user = this.users.get(username);
+        Character c = null;
+        if(user != null){
+            for(int i = 0; i< this.characters.size(); i++) {
+                if(username.equals(this.characters.get(i).getUsername())){
+                    c = this.characters.get(i);
+                }
+            }
+        }
+        else{
+            throw new UserNotFoundException();
+        }
+        return c;
     }
 
     @Override
-    public void UpdateStats(String username, Character character) {
-
+    public void UpdateStats(Character character) {
+        for(int i = 0; i< this.characters.size(); i++) {
+            if(character.getUsername().equals(this.characters.get(i).getUsername())){
+                this.characters.remove(i);
+                this.characters.add(new Character(character.getUsername(),character.getHealth(),character.getMana(),character.getLevel(),character.getDamage(),character.getDefense(),character.getMoney()));
+            }
+        }
     }
 
     @Override

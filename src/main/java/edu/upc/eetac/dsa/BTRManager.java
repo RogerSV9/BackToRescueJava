@@ -13,15 +13,15 @@ public interface BTRManager {
 
     void UserDelete(String username, String password) throws UserNotFoundException;
 
-    void LogOut(String username, Character character);
+    void LogOut(Character character);
 
     void AddCharacter(String username, int health, int mana, int damage, int defense, int level, double money);
 
     /**States*/
 
-    Character GetStats(String username);
+    Character GetStats(String username) throws UserNotFoundException;
 
-    void UpdateStats(String username, Character character);
+    void UpdateStats(Character character);
 
     /**Objects*/
 
