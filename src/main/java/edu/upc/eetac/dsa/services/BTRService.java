@@ -157,7 +157,7 @@ public class BTRService {
             @ApiResponse(code = 404, message = "User not found")
     })
 
-    @Path("/addobject}")
+    @Path("/addobject")
     @Produces(MediaType.APPLICATION_JSON)
     public Response Signin(Objeto objeto) {
         bm.AddObject(objeto.getUsername(),objeto.getName(),objeto.getImage());
