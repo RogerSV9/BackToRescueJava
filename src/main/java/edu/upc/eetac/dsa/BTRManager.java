@@ -7,9 +7,9 @@ public interface BTRManager {
 
     /**Authentication*/
 
-    void UserRegistration(String username, String password);
+    void UserRegistration(User user);
 
-    Character UserLogin(String username, String password) throws UserNotFoundException;
+    Character UserLogin(User user) throws UserNotFoundException;
 
     void UserDelete(String username, String password) throws UserNotFoundException;
 
