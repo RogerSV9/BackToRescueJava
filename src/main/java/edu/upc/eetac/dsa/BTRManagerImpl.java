@@ -26,6 +26,7 @@ public class BTRManagerImpl implements BTRManager {
         objects = new ArrayList<>();
         characters = new ArrayList<>();
         levels = new String[10];
+        levels[0] = "patata";
     }
 
     @Override
