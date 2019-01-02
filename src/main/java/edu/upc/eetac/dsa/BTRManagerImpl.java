@@ -26,14 +26,15 @@ public class BTRManagerImpl implements BTRManager {
         objects = new ArrayList<>();
         characters = new ArrayList<>();
         levels = new String[10];
+        levels[0] = "patata";
     }
 
     @Override
-    public void UserRegistration(String username, String password) {
-        User user = users.get(username);
-        if(user == null) {
-            users.put(username,new User(username,password));
-            AddCharacter(username,100,100,50,50,2,999);
+    public void UserRegistration(User user) {
+        User user2 = users.get(user.username);
+        if(user2 == null) {
+            users.put(user.username,new User(user.username,user.password));
+            AddCharacter(user.username,100,100,50,50,2,999);
         }
         else{
             log.error("User is already in the system");
@@ -41,13 +42,13 @@ public class BTRManagerImpl implements BTRManager {
     }
 
     @Override
-    public Character UserLogin(String username, String password) throws UserNotFoundException {
-        User user = users.get(username);
+    public Character UserLogin(User user) throws UserNotFoundException {
+        User user2 = users.get(user.username);
         Character c = null;
-        if(user != null) {
-            if (user.getPassword().equals(password)) {
+        if(user2 != null) {
+            if (user2.getPassword().equals(user.password)) {
                 for(int i = 0; i< this.characters.size(); i++) {
-                    if(username.equals(this.characters.get(i).getUsername())){
+                    if(user.username.equals(this.characters.get(i).getUsername())){
                         c = this.characters.get(i);
                     }
                 }

@@ -24,7 +24,8 @@ public class AuthenticationService {
 
     public AuthenticationService(){
         this.bm = BTRManagerImpl.getInstance();
-        bm.UserRegistration("Laia","munoz");
+        User user1 = new User("Laia", "munoz");
+        bm.UserRegistration(user1);
         bm.AddObject("Laia","Sword","sword.jpg");
         bm.AddObject("Laia","Gold","gold.jpg");
         bm.AddCharacter("Laia",100,100,50,50,2,999);
@@ -57,11 +58,11 @@ public class AuthenticationService {
             @ApiResponse(code = 404, message = "User not found")
     })
 
-    @Path("/login/{user}/{password}")
+    @Path("/login")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response Login(@PathParam("user") String user, @PathParam("password") String password) {
+    public Response Login(User user) {
         try {
-            Character charact = this.bm.UserLogin(user, password);
+            Character charact = this.bm.UserLogin(user);
             GenericEntity<Character> entity = new GenericEntity<Character>(charact){};
             return Response.status(200).entity(entity).build();
         } catch (UserNotFoundException e) {
@@ -92,10 +93,10 @@ public class AuthenticationService {
             @ApiResponse(code = 404, message = "User not found")
     })
 
-    @Path("/signin/{username}/{password}")
+    @Path("/signin")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response Signin(@PathParam("username") String username, @PathParam("password") String password) {
-            bm.UserRegistration(username,password);
+    public Response Signin(User user) {
+            bm.UserRegistration(user);
             return Response.status(201).build();
     }
 
