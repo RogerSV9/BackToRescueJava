@@ -124,9 +124,7 @@ public class BTRManagerImpl implements BTRManager {
 
     @Override
     public List<Character> GetScoreboard() {
-        List <Character> list = new ArrayList<>();
-        list.addAll(characters);
-        return list;
+        return this.characters;
     }
 
     @Override

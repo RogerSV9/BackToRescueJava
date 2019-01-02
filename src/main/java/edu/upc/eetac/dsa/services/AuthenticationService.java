@@ -26,29 +26,7 @@ public class AuthenticationService {
         this.bm = BTRManagerImpl.getInstance();
         User user1 = new User("Laia", "munoz");
         bm.UserRegistration(user1);
-        bm.AddObject("Laia","Sword","sword.jpg");
-        bm.AddObject("Laia","Gold","gold.jpg");
         bm.AddCharacter("Laia",100,100,50,50,2,999);
-    }
-
-    @GET
-    @ApiOperation(value = "get Objects from a user", notes = "asdasd")
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Successful", response = Object.class),
-            @ApiResponse(code = 404, message = "User not found")
-    })
-    @Path("/objectsbyusername/{username}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getObjectsByUsername(@PathParam("username") String username) throws UserNotFoundException {
-        List<Objeto> objects;
-        try {
-            objects = this.bm.GetObjects(username);
-            GenericEntity<List<Objeto>> entity = new GenericEntity<List<Objeto>>(objects){};
-            return Response.status(200).entity(entity).build();
-        } catch (UserNotFoundException e) {
-            e.printStackTrace();
-            return Response.status(404).build();
-        }
     }
 
     @POST
@@ -71,20 +49,6 @@ public class AuthenticationService {
         }
     }
 
-    @POST
-    @ApiOperation(value = "GetLevelData", notes = "asdasd")
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Successful", response= String.class)
-    })
-
-    @Path("/level/{level}")
-    @Produces(MediaType.TEXT_PLAIN)
-    public Response getLevelData(@PathParam("level") int level) {
-        String game = bm.GetLevelData(level);
-        //game = "Game";
-        GenericEntity<String> entity = new GenericEntity<String>(game){};
-        return Response.status(200).entity(entity).build();
-    }
 
     @POST
     @ApiOperation(value = "Sign-in", notes = "asdasd")
@@ -129,35 +93,6 @@ public class AuthenticationService {
         bm.LogOut(character);
         return Response.status(201).build();
     }
-    @GET
-    @ApiOperation(value = "get Stats from a user", notes = "asdasd")
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Successful", response = Character.class),
-            @ApiResponse(code = 404, message = "User not found")
-    })
-    @Path("/statsbyusername/{username}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getStatsByUsername(@PathParam("username") String username) throws UserNotFoundException {
-        try {
-            Character character = this.bm.GetStats(username);
-            GenericEntity<Character> entity = new GenericEntity<Character>(character){};
-            return Response.status(200).entity(entity).build();
-        } catch (UserNotFoundException e) {
-            e.printStackTrace();
-            return Response.status(404).build();
-        }
-    }
 
-    @POST
-    @ApiOperation(value = "Add an object", notes = "asdasd")
-    @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "Successful")
-    })
 
-    @Path("/addobject")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response Signin(Objeto objeto) {
-        bm.AddObject(objeto.getUsername(),objeto.getName(),objeto.getImage());
-        return Response.status(201).build();
-    }
 }
