@@ -122,6 +122,13 @@ public class BTRManagerImpl implements BTRManager {
     }
 
     @Override
+    public List<Character> GetScoreboard() {
+        List <Character> list = new ArrayList<>();
+        list.addAll(characters);
+        return list;
+    }
+
+    @Override
     public List<Objeto> GetObjects(String username) throws UserNotFoundException{
         List<Objeto> objs = new ArrayList<>();
         User user = this.users.get(username);
@@ -146,7 +153,7 @@ public class BTRManagerImpl implements BTRManager {
     }
 
     @Override
-    public String getLevelData(int level) {
+    public String GetLevelData(int level) {
         return levels[level-1];
     }
 

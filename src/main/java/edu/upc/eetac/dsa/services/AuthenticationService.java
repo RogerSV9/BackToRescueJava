@@ -8,7 +8,6 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.apache.log4j.Logger;
 
-import javax.inject.Singleton;
 import javax.ws.rs.*;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
@@ -16,16 +15,14 @@ import javax.ws.rs.core.Response;
 import java.lang.Object;
 import java.util.List;
 
-import static edu.upc.eetac.dsa.BTRManagerImpl.getInstance;
 
-
-@Api(value = "/service", description = "Endpoint to BTR Service")
-@Path("/service")
-public class BTRService {
-    final static Logger log = Logger.getLogger(BTRService.class.getName());
+@Api(value = "/authentication", description = "Endpoint to Authentication Service")
+@Path("/authentication")
+public class AuthenticationService {
+    final static Logger log = Logger.getLogger(AuthenticationService.class.getName());
     private BTRManager bm;
 
-    public BTRService(){
+    public AuthenticationService(){
         this.bm = BTRManagerImpl.getInstance();
         bm.UserRegistration("Laia","munoz");
         bm.AddObject("Laia","Sword","sword.jpg");
@@ -82,7 +79,7 @@ public class BTRService {
     @Path("/level/{level}")
     @Produces(MediaType.TEXT_PLAIN)
     public Response getLevelData(@PathParam("level") int level) {
-        String game = bm.getLevelData(level);
+        String game = bm.GetLevelData(level);
         //game = "Game";
         GenericEntity<String> entity = new GenericEntity<String>(game){};
         return Response.status(200).entity(entity).build();
@@ -103,7 +100,7 @@ public class BTRService {
     }
 
     @DELETE
-    @ApiOperation(value = "Delete", notes = "asdasd")
+    @ApiOperation(value = "Delete a User", notes = "asdasd")
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "Successful"),
             @ApiResponse(code = 404, message = "User not found")
@@ -121,7 +118,7 @@ public class BTRService {
         }
     }
     @PUT
-    @ApiOperation(value = "update a Track", notes = "asdasd")
+    @ApiOperation(value = "update a User", notes = "asdasd")
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "Successful"),
             @ApiResponse(code = 404, message = "Track not found")
@@ -151,10 +148,9 @@ public class BTRService {
     }
 
     @POST
-    @ApiOperation(value = "Sign-in", notes = "asdasd")
+    @ApiOperation(value = "Add an object", notes = "asdasd")
     @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "Successful"),
-            @ApiResponse(code = 404, message = "User not found")
+            @ApiResponse(code = 201, message = "Successful")
     })
 
     @Path("/addobject")

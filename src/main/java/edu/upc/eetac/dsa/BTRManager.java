@@ -23,6 +23,10 @@ public interface BTRManager {
 
     void UpdateStats(Character character);
 
+    /**Scoreboard*/
+
+    List<Character> GetScoreboard();
+
     /**Objects*/
 
     List<Objeto> GetObjects(String username) throws UserNotFoundException;
@@ -31,6 +35,6 @@ public interface BTRManager {
 
     /**Map*/
 
-    String getLevelData(int level);
+    String GetLevelData(int level);
 
 }
