@@ -20,7 +20,7 @@ public interface BTRManager {
 
     Player GetStats(String username) throws UserNotFoundException;
 
-    void UpdateStats(Player player);
+    void UpdateStats(Player player) throws UserNotFoundException;
 
     /**Scoreboard*/
 

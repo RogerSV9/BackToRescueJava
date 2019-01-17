@@ -69,10 +69,24 @@ public class QueryHelper {
 
         return sb.toString();
     }
+    public static String createQuerySELECTLEVEL(Class theClass) {
+        StringBuffer sb = new StringBuffer();
+        sb.append("SELECT * FROM ").append(theClass.getSimpleName());
+        sb.append(" WHERE level = ?");
+
+        return sb.toString();
+    }
     public static String createQuerySELECTIDUSER(Class theClass) {
         StringBuffer sb = new StringBuffer();
         sb.append("SELECT * FROM ").append(theClass.getSimpleName());
         sb.append(" WHERE username = ?").append(" ").append("AND password = ?");
+
+        return sb.toString();
+    }
+    public static String createQuerySELECTID(Class theClass) {
+        StringBuffer sb = new StringBuffer();
+        sb.append("SELECT * FROM ").append(theClass.getSimpleName());
+        sb.append(" WHERE username = ?");
 
         return sb.toString();
     }

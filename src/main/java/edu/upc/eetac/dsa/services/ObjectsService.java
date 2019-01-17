@@ -21,8 +21,8 @@ public class ObjectsService {
 
     public ObjectsService() {
         this.bm = BTRManagerImpl.getInstance();
-        bm.AddObject("Laia","Sword","sword.jpg");
-        bm.AddObject("Laia","Gold","gold.jpg");
+        //bm.AddObject("Laia","Sword","sword.jpg");
+        //bm.AddObject("Laia","Gold","gold.jpg");
     }
     @GET
     @ApiOperation(value = "get Objects from a user", notes = "asdasd")

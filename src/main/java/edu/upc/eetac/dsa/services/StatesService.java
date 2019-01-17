@@ -40,7 +40,7 @@ public class StatesService {
             return Response.status(404).build();
         }
     }
-    @POST
+    @PUT
     @ApiOperation(value = "Update Stats", notes = "asdasd")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successful", response= Player.class),
@@ -50,8 +50,13 @@ public class StatesService {
     @Path("/updatestats")
     @Produces(MediaType.APPLICATION_JSON)
     public Response Update_Stats(Player player) {
-        this.bm.UpdateStats(player);
-        return Response.status(200).build();
+        try {
+            this.bm.UpdateStats(player);
+            return Response.status(200).build();
+        } catch (UserNotFoundException e) {
+            e.printStackTrace();
+            return Response.status(404).build();
+        }
     }
 
 }
