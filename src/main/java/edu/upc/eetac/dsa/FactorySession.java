@@ -21,14 +21,16 @@ public class FactorySession {
 
     private static Connection getConnection() {
         Connection conn = null;
-        /*String namedb = getString("mysql", "namedb");
+        String namedb = getString("mysql", "mainDB");
         String username = getString("mysql", "username");
-        String password = getString("mysql", "password");*/
+        String password = getString("mysql", "password");
         //instanciar driver
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            conn = DriverManager.getConnection("jdbc:mysql://localhost/test?" + "user=root&password=admin1234");
+            //conn = DriverManager.getConnection("jdbc:mysql://localhost/test?" + "user=root&password=admin1234");
+            //conn = DriverManager.getConnection("jdbc:mysql://localhost/test?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "root", "admin1234");
             //conn = DriverManager.getConnection("jdbc:mysql://localhost/" + namedb + "?user=" + username + "&password=" + password +"");
+            conn = DriverManager.getConnection("jdbc:mysql://localhost/"+namedb+"?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", username, password);
 
         } catch (SQLException ex) {
             // handle any errors

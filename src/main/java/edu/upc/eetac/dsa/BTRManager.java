@@ -9,23 +9,22 @@ public interface BTRManager {
 
     void UserRegistration(User user);
 
-    Character UserLogin(User user) throws UserNotFoundException;
+    Player UserLogin(User user) throws UserNotFoundException;
 
     void UserDelete(String username, String password) throws UserNotFoundException;
 
-    void LogOut(Character character);
+    void LogOut(Player player);
 
-    void AddCharacter(String username, int health, int mana, int damage, int defense, int level, double money);
 
     /**States*/
 
-    Character GetStats(String username) throws UserNotFoundException;
+    Player GetStats(String username) throws UserNotFoundException;
 
-    void UpdateStats(Character character);
+    void UpdateStats(Player player);
 
     /**Scoreboard*/
 
-    List<Character> GetScoreboard();
+    List<Player> GetScoreboard();
 
     /**Objects*/
 

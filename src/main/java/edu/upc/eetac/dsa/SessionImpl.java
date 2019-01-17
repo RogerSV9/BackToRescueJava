@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class SessionImpl implements Session{
+public class SessionImpl implements Session {
     private final Connection conn;
 
     public SessionImpl(Connection conn) {
@@ -45,6 +45,62 @@ public class SessionImpl implements Session{
         }
     }
 
+    public void register(Object entity) {
+
+        String insertQuery = QueryHelper.createQueryRegister(entity);
+
+        // INSERT INTO Employee (ID, name, surname, salary) VALUES (?, ?, ?, ?)
+
+        PreparedStatement pstm = null;
+
+        try {
+            pstm = conn.prepareStatement(insertQuery);
+            pstm.setObject(1,0);
+            int i = 2;
+
+            for (String field: ObjectHelper.getFields(entity)) {
+                pstm.setObject(i++, ObjectHelper.getter(entity, field));
+            }
+
+            pstm.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        }
+    }
+    public void NewPlayer(Object entity) {
+
+        String insertQuery = QueryHelper.createQueryRegister(entity);
+
+        // INSERT INTO Employee (ID, name, surname, salary) VALUES (?, ?, ?, ?)
+
+        PreparedStatement pstm = null;
+
+        try {
+            pstm = conn.prepareStatement(insertQuery);
+            pstm.setObject(1,0);
+            int i = 2;
+
+            for (String field: ObjectHelper.getFields(entity)) {
+                pstm.setObject(i++, ObjectHelper.getter(entity, field));
+            }
+
+            pstm.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        }
+    }
+
+
     public void close() {
         try {
             this.conn.close();
@@ -61,7 +117,51 @@ public class SessionImpl implements Session{
     }
 
     public Object get(Class theClass, int ID) {
-        String selectQuery = QueryHelper.createQuerySELECT(theClass);
+        String selectQuery = QueryHelper.createQuerySELECT2(theClass);
+
+        Object entity = null;
+        try {
+            entity = theClass.newInstance();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        ResultSet rs = null;
+        PreparedStatement pstm = null;
+
+        try {
+            pstm = conn.prepareStatement(selectQuery);
+            pstm.setObject(1,ID);
+            rs = pstm.executeQuery();
+
+
+            while(rs.next()){
+                Field[] fields = theClass.getDeclaredFields();
+                rs.getString(1);
+                for (int i = 0; i<fields.length; i++){
+
+
+                    String fieldName = this.getFieldName(i+2, rs);
+
+                    ObjectHelper.setter(entity, fieldName, rs.getObject(i + 2));
+                }
+
+            }
+
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        }
+
+        return entity;
+    }
+    public Object login(Class theClass, int ID) {
+        String selectQuery = QueryHelper.createQueryPlayer(theClass);
 
         Object entity = null;
         try {
@@ -105,6 +205,33 @@ public class SessionImpl implements Session{
         return entity;
     }
 
+    @Override
+    public int getID(Class theClass, String username, String password) {
+        String selectQuery = QueryHelper.createQuerySELECTIDUSER(theClass);
+
+        ResultSet rs;
+        PreparedStatement pstm;
+
+        int id = 0;
+
+        try {
+            pstm = conn.prepareStatement(selectQuery);
+            pstm.setObject(1, username);
+            pstm.setObject(2, password);
+            rs = pstm.executeQuery();
+
+            rs.next();
+
+            id = rs.getInt(1);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            //throw new UserNotFoundException();
+        }
+
+        return id;
+    }
+
     public void update(Object object, int ID) {
         String updateQuery = QueryHelper.createQueryUPDATE(object);
 
@@ -114,12 +241,12 @@ public class SessionImpl implements Session{
             pstm = conn.prepareStatement(updateQuery);
             int i = 1;
 
+
             for(String field: ObjectHelper.getFields(object)){
                 pstm.setObject(i++, ObjectHelper.getter(object, field));
             }
 
             pstm.setObject(i,ID);
-
             pstm.executeUpdate();
 
         } catch (SQLException e) {

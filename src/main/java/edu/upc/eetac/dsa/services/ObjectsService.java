@@ -1,12 +1,10 @@
 package edu.upc.eetac.dsa.services;
 
 import edu.upc.eetac.dsa.*;
-import edu.upc.eetac.dsa.Character;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
-import org.apache.log4j.Logger;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.GenericEntity;

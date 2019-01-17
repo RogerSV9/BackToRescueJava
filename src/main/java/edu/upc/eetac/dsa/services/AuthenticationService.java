@@ -1,7 +1,7 @@
 package edu.upc.eetac.dsa.services;
 
 import edu.upc.eetac.dsa.*;
-import edu.upc.eetac.dsa.Character;
+import edu.upc.eetac.dsa.Player;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -12,8 +12,6 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.lang.Object;
-import java.util.List;
 
 
 @Api(value = "/authentication", description = "Endpoint to Authentication Service")
@@ -25,14 +23,14 @@ public class AuthenticationService {
     public AuthenticationService(){
         this.bm = BTRManagerImpl.getInstance();
         User user1 = new User("Laia", "munoz");
-        bm.UserRegistration(user1);
-        bm.AddCharacter("Laia",100,100,50,50,2,999);
+        //bm.UserRegistration(user1);
+        //bm.AddCharacter("Laia",100,100,50,50,2,999);
     }
 
     @POST
     @ApiOperation(value = "Login", notes = "asdasd")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Successful", response= Character.class),
+            @ApiResponse(code = 200, message = "Successful", response= Player.class),
             @ApiResponse(code = 404, message = "User not found")
     })
 
@@ -40,8 +38,8 @@ public class AuthenticationService {
     @Produces(MediaType.APPLICATION_JSON)
     public Response Login(User user) {
         try {
-            Character charact = this.bm.UserLogin(user);
-            GenericEntity<Character> entity = new GenericEntity<Character>(charact){};
+            Player charact = this.bm.UserLogin(user);
+            GenericEntity<Player> entity = new GenericEntity<Player>(charact){};
             return Response.status(200).entity(entity).build();
         } catch (UserNotFoundException e) {
             e.printStackTrace();
@@ -89,8 +87,8 @@ public class AuthenticationService {
             @ApiResponse(code = 404, message = "Track not found")
     })
     @Path("/update")
-    public Response updateUser(Character character) {
-        bm.LogOut(character);
+    public Response updateUser(Player player) {
+        bm.LogOut(player);
         return Response.status(201).build();
     }
 

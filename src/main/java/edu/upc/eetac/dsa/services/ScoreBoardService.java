@@ -1,12 +1,11 @@
 package edu.upc.eetac.dsa.services;
 
 import edu.upc.eetac.dsa.*;
-import edu.upc.eetac.dsa.Character;
+import edu.upc.eetac.dsa.Player;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
-import org.apache.log4j.Logger;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.GenericEntity;
@@ -32,9 +31,9 @@ public class ScoreBoardService {
     @Path("/scoreboard")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getScoreboard() {
-        List<Character> characters;
-        characters = this.bm.GetScoreboard();
-        GenericEntity<List<Character>> entity = new GenericEntity<List<Character>>(characters){};
+        List<Player> players;
+        players = this.bm.GetScoreboard();
+        GenericEntity<List<Player>> entity = new GenericEntity<List<Player>>(players){};
         return Response.status(200).entity(entity).build();
     }
 }

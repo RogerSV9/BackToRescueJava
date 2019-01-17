@@ -11,7 +11,7 @@ public class BTRManagerImpl implements BTRManager {
 
     private HashMap<String,User> users;
     private List<Objeto> objects;
-    private List<Character> characters;
+    private List<Player> players;
     private String[] levels;
 
     public static BTRManager getInstance(){
@@ -24,7 +24,7 @@ public class BTRManagerImpl implements BTRManager {
     private BTRManagerImpl(){
         users = new HashMap<>();
         objects = new ArrayList<>();
-        characters = new ArrayList<>();
+        players = new ArrayList<>();
         levels = new String[10];
         levels[0] = "patata";
     }
@@ -33,8 +33,22 @@ public class BTRManagerImpl implements BTRManager {
     public void UserRegistration(User user) {
         User user2 = users.get(user.username);
         if(user2 == null) {
-            users.put(user.username,new User(user.username,user.password));
-            AddCharacter(user.username,100,100,50,50,2,999);
+            //users.put(user.username,new User(user.username,user.password));
+            //AddCharacter(user.username,100,100,50,50,2,999);
+            Session session = null;
+            try {
+                session = FactorySession.openSession();
+                users.put(user.username,new User(user.username,user.password));
+                Player player = new Player(user.username,100,100,50,50,2,999);
+                session.register(user);
+                session.register(player);
+            }
+            catch (Exception e) {
+                // LOG
+            }
+            finally {
+                session.close();
+            }
         }
         else{
             log.error("User is already in the system");
@@ -42,14 +56,27 @@ public class BTRManagerImpl implements BTRManager {
     }
 
     @Override
-    public Character UserLogin(User user) throws UserNotFoundException {
-        User user2 = users.get(user.username);
-        Character c = null;
-        if(user2 != null) {
+    public Player UserLogin(User user) throws UserNotFoundException {
+        //User user2 = users.get(user.username);
+        Player c = null;
+        Session session = null;
+        int userID;
+        try {
+            session = FactorySession.openSession();
+            userID = (Integer) session.getID(User.class, user.getUsername(),user.getPassword());
+            c = (Player) session.login(User.class, userID);
+        }
+        catch (Exception e) {
+            // LOG
+        }
+        finally {
+            session.close();
+        }
+        /*if(user2 != null) {
             if (user2.getPassword().equals(user.password)) {
-                for(int i = 0; i< this.characters.size(); i++) {
-                    if(user.username.equals(this.characters.get(i).getUsername())){
-                        c = this.characters.get(i);
+                for(int i = 0; i< this.players.size(); i++) {
+                    if(user.username.equals(this.players.get(i).getUsername())){
+                        c = this.players.get(i);
                     }
                 }
             } else {
@@ -59,7 +86,7 @@ public class BTRManagerImpl implements BTRManager {
         else{
             log.error("User not found");
             throw new UserNotFoundException();
-        }
+        }*/
 
         return c;
     }
@@ -70,9 +97,9 @@ public class BTRManagerImpl implements BTRManager {
         if(user != null) {
             if (user.getPassword().equals(password)) {
                 this.users.remove(username);
-                for(int i = 0; i< this.characters.size(); i++) {
-                    if(username.equals(this.characters.get(i).getUsername())){
-                        this.characters.remove(i);
+                for(int i = 0; i< this.players.size(); i++) {
+                    if(username.equals(this.players.get(i).getUsername())){
+                        this.players.remove(i);
                     }
                 }
             } else {
@@ -86,23 +113,18 @@ public class BTRManagerImpl implements BTRManager {
     }
 
     @Override
-    public void LogOut(Character character) {
-        UpdateStats(character);
+    public void LogOut(Player player) {
+        UpdateStats(player);
     }
 
     @Override
-    public void AddCharacter(String username, int health, int mana, int damage, int defense, int level, double money) {
-        characters.add(new Character(username, health, mana, damage, defense, level, money));
-    }
-
-    @Override
-    public Character GetStats(String username) throws UserNotFoundException{
+    public Player GetStats(String username) throws UserNotFoundException{
         User user = this.users.get(username);
-        Character c = null;
+        Player c = null;
         if(user != null){
-            for(int i = 0; i< this.characters.size(); i++) {
-                if(username.equals(this.characters.get(i).getUsername())){
-                    c = this.characters.get(i);
+            for(int i = 0; i< this.players.size(); i++) {
+                if(username.equals(this.players.get(i).getUsername())){
+                    c = this.players.get(i);
                 }
             }
         }
@@ -113,18 +135,31 @@ public class BTRManagerImpl implements BTRManager {
     }
 
     @Override
-    public void UpdateStats(Character character) {
-        for(int i = 0; i< this.characters.size(); i++) {
-            if(character.getUsername().equals(this.characters.get(i).getUsername())){
-                this.characters.remove(i);
-                this.characters.add(new Character(character.getUsername(),character.getHealth(),character.getMana(),character.getLevel(),character.getDamage(),character.getDefense(),character.getMoney()));
+    public void UpdateStats(Player player) {
+        for(int i = 0; i< this.players.size(); i++) {
+            if(player.getUsername().equals(this.players.get(i).getUsername())){
+                this.players.remove(i);
+                this.players.add(new Player(player.getUsername(), player.getHealth(), player.getMana(), player.getLevel(), player.getDamage(), player.getDefense(), player.getMoney()));
             }
         }
     }
 
     @Override
-    public List<Character> GetScoreboard() {
-        return this.characters;
+    public List<Player> GetScoreboard() {
+        Session session = null;
+        List <Player> players = null;
+        int userID;
+        try {
+            session = FactorySession.openSession();
+            players = session.findAll(Player.class);
+        }
+        catch (Exception e) {
+            // LOG
+        }
+        finally {
+            session.close();
+        }
+        return players;
     }
 
     @Override
