@@ -221,7 +221,7 @@ public class SessionImpl implements Session {
 
             rs.next();
 
-            data = rs.getString(2);
+            data = rs.getString(3);
 
         } catch (SQLException e) {
             e.printStackTrace();

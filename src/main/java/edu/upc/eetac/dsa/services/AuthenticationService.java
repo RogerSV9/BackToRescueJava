@@ -91,6 +91,24 @@ public class AuthenticationService {
         bm.LogOut(player);
         return Response.status(201).build();
     }
+    @POST
+    @ApiOperation(value = "Log-out", notes = "asdasd")
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "Successful"),
+            @ApiResponse(code = 500, message = "Internal error")
+    })
 
+    @Path("/logout")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response Logout(Player player) {
+        try {
+            bm.LogOut(player);
+            return Response.status(201).build();
+        }
+        catch(Exception e){
+            e.printStackTrace();
+            return Response.status(500).build();
+        }
+    }
 
 }

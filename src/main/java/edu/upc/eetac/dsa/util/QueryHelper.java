@@ -106,8 +106,19 @@ public class QueryHelper {
     }
 
     public static String createQueryUPDATE(Object entity) {
+        StringBuffer sb = new StringBuffer();
+        sb.append("UPDATE ").append(entity.getClass().getSimpleName()).append(" ").append("SET");
 
-        StringBuffer sb = new StringBuffer("UPDATE ");
+        String [] fields = ObjectHelper.getFields(entity);
+
+        for(String field: fields){
+            sb.append(" ").append(field);
+            sb.append(" = ?,");
+        }
+        sb.delete(sb.length() -1, sb.length());
+
+        sb.append(" WHERE ID = ?");
+        /*StringBuffer sb = new StringBuffer("UPDATE ");
         sb.append(entity.getClass().getSimpleName()).append(" ");
         sb.append("SET ");
 
@@ -120,7 +131,7 @@ public class QueryHelper {
 
         sb.delete(sb.length()-2,sb.length()).append(" ");
 
-        sb.append("WHERE ID = ?");
+        sb.append("WHERE ID = ?");*/
 
         return sb.toString();
     }

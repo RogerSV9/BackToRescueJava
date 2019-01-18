@@ -172,7 +172,8 @@ public class BTRManagerImpl implements BTRManager {
         try {
             session = FactorySession.openSession();
             userID = (Integer) session.getID2(User.class, player.username);
-            session.update(Player.class, userID);
+            log.info("userID= "+userID);
+            session.update(player, userID);
             //c = (Player)session.login(Player.class, userID);
         } catch (Exception e) {
             throw new UserNotFoundException();
@@ -244,10 +245,9 @@ public class BTRManagerImpl implements BTRManager {
     public String GetLevelData(int level) {
         String levels = null;
         Session session = null;
-        int userID;
         try {
             session = FactorySession.openSession();
-            levels = session.getLevel(String.class, level);
+            levels = session.getLevel(Board.class, level);
         } catch (Exception e) {
             // LOG
         } finally {
