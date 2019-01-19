@@ -23,7 +23,8 @@ public class MapService {
     @POST
     @ApiOperation(value = "GetLevelData", notes = "asdasd")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Successful", response= String.class)
+            @ApiResponse(code = 200, message = "Successful", response= String.class),
+            @ApiResponse(code = 500, message = "Internal Server Error")
     })
 
     @Path("/level/{level}")
@@ -31,7 +32,12 @@ public class MapService {
     public Response getLevelData(@PathParam("level") int level) {
         String game = bm.GetLevelData(level);
         GenericEntity<String> entity = new GenericEntity<String>(game){};
-        return Response.status(200).entity(entity).build();
+        if(game != null) {
+            return Response.status(200).entity(entity).build();
+        }
+        else{
+            return Response.status(200).build();
+        }
     }
 
 }

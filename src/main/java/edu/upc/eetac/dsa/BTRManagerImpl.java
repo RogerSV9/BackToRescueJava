@@ -131,15 +131,6 @@ public class BTRManagerImpl implements BTRManager {
     }
 
     @Override
-    public void LogOut(Player player) {
-        try {
-            UpdateStats(player);
-        } catch (UserNotFoundException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
     public Player GetStats(String username) throws UserNotFoundException {
         Player c = null;
         Session session = null;

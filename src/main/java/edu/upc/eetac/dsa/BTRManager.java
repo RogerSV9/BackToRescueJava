@@ -13,8 +13,6 @@ public interface BTRManager {
 
     void UserDelete(String username, String password) throws UserNotFoundException;
 
-    void LogOut(Player player);
-
 
     /**States*/
 

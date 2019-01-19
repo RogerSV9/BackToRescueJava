@@ -22,9 +22,6 @@ public class AuthenticationService {
 
     public AuthenticationService(){
         this.bm = BTRManagerImpl.getInstance();
-        User user1 = new User("Laia", "munoz");
-        //bm.UserRegistration(user1);
-        //bm.AddCharacter("Laia",100,100,50,50,2,999);
     }
 
     @POST
@@ -94,12 +91,19 @@ public class AuthenticationService {
     @ApiOperation(value = "update a User", notes = "asdasd")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successful"),
-            @ApiResponse(code = 404, message = "Track not found")
+            @ApiResponse(code = 404, message = "User Not Found"),
+            @ApiResponse(code = 500, message = "Internal server error")
     })
     @Path("/update")
     public Response updateUser(Player player) {
-        bm.LogOut(player);
-        return Response.status(200).build();
+        try {
+            bm.UpdateStats(player);
+            return Response.status(200).build();
+        } catch (UserNotFoundException e){
+            return  Response.status(404).build();
+        } catch(Exception e){
+            return Response.status(500).build();
+        }
     }
     @POST
     @ApiOperation(value = "Log-out", notes = "asdasd")
@@ -112,10 +116,11 @@ public class AuthenticationService {
     @Produces(MediaType.APPLICATION_JSON)
     public Response Logout(Player player) {
         try {
-            bm.LogOut(player);
+            bm.UpdateStats(player);
             return Response.status(200).build();
-        }
-        catch(Exception e){
+        } catch (UserNotFoundException e){
+            return Response.status(404).build();
+        } catch(Exception e){
             e.printStackTrace();
             return Response.status(500).build();
         }
