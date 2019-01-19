@@ -7,7 +7,7 @@ public interface BTRManager {
 
     /**Authentication*/
 
-    void UserRegistration(User user);
+    Boolean UserRegistration(User user);
 
     Player UserLogin(User user) throws UserNotFoundException;
 

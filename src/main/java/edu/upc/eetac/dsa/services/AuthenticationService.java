@@ -31,7 +31,8 @@ public class AuthenticationService {
     @ApiOperation(value = "Login", notes = "asdasd")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successful", response= Player.class),
-            @ApiResponse(code = 404, message = "User not found")
+            @ApiResponse(code = 404, message = "User not found"),
+            @ApiResponse(code = 500, message = "Internal server error")
     })
 
     @Path("/login")
@@ -43,23 +44,32 @@ public class AuthenticationService {
             return Response.status(200).entity(entity).build();
         } catch (UserNotFoundException e) {
             e.printStackTrace();
-            return Response.status(404).build();
+            return Response.status(404).entity(e).build();
+        } catch (Exception e){
+            e.printStackTrace();
+            return Response.status(500).entity(e).build();
         }
     }
 
 
     @POST
-    @ApiOperation(value = "Sign-in", notes = "asdasd")
+    @ApiOperation(value = "Register", notes = "asdasd")
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "Successful"),
-            @ApiResponse(code = 404, message = "User not found")
+            @ApiResponse(code = 500, message = "User already in the system")
     })
 
     @Path("/signin")
     @Produces(MediaType.APPLICATION_JSON)
     public Response Signin(User user) {
-            bm.UserRegistration(user);
-            return Response.status(201).build();
+            Boolean bool;
+            bool = bm.UserRegistration(user);
+            if(bool) {
+                return Response.status(201).build();
+            }
+            else{
+                return Response.status(500).build();
+            }
     }
 
     @DELETE
@@ -83,19 +93,19 @@ public class AuthenticationService {
     @PUT
     @ApiOperation(value = "update a User", notes = "asdasd")
     @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "Successful"),
+            @ApiResponse(code = 200, message = "Successful"),
             @ApiResponse(code = 404, message = "Track not found")
     })
     @Path("/update")
     public Response updateUser(Player player) {
         bm.LogOut(player);
-        return Response.status(201).build();
+        return Response.status(200).build();
     }
     @POST
     @ApiOperation(value = "Log-out", notes = "asdasd")
     @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "Successful"),
-            @ApiResponse(code = 500, message = "Internal error")
+            @ApiResponse(code = 200, message = "Successful"),
+            @ApiResponse(code = 500, message = "Internal server error")
     })
 
     @Path("/logout")
@@ -103,7 +113,7 @@ public class AuthenticationService {
     public Response Logout(Player player) {
         try {
             bm.LogOut(player);
-            return Response.status(201).build();
+            return Response.status(200).build();
         }
         catch(Exception e){
             e.printStackTrace();

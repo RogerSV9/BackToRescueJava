@@ -1,5 +1,6 @@
 package edu.upc.eetac.dsa;
 
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.apache.log4j.Logger;
 
 import java.util.*;
@@ -30,26 +31,31 @@ public class BTRManagerImpl implements BTRManager {
     }
 
     @Override
-    public void UserRegistration(User user) {
-        User user2 = users.get(user.username);
-        if (user2 == null) {
+    public Boolean UserRegistration(User user) {
+            Boolean bool = false;
             //users.put(user.username,new User(user.username,user.password));
             //AddCharacter(user.username,100,100,50,50,2,999);
             Session session = null;
+            int userID;
             try {
                 session = FactorySession.openSession();
                 users.put(user.username, new User(user.username, user.password));
-                Player player = new Player(user.username, 100, 100, 50, 50, 2, 999);
-                session.register(user);
-                session.register(player);
+                Player player = new Player(user.username, 100, 100, 50, 50, 1, 1000);
+                userID = (Integer) session.getID(User.class, user.getUsername(), user.getPassword());
+                if(userID == 0) {
+                    session.register(user);
+                    session.register(player);
+                    bool = true;
+                }
+                else{
+                    bool = false;
+                }
             } catch (Exception e) {
-                // LOG
+                e.printStackTrace();
             } finally {
                 session.close();
             }
-        } else {
-            log.error("User is already in the system");
-        }
+            return bool;
     }
 
     @Override
@@ -61,9 +67,12 @@ public class BTRManagerImpl implements BTRManager {
         try {
             session = FactorySession.openSession();
             userID = (Integer) session.getID(User.class, user.getUsername(), user.getPassword());
+            if(userID == 0){
+                throw new UserNotFoundException();
+            }
             c = (Player) session.login(Player.class, userID);
         } catch (Exception e) {
-            throw new UserNotFoundException();
+            e.printStackTrace();
         } finally {
             session.close();
         }
@@ -115,7 +124,7 @@ public class BTRManagerImpl implements BTRManager {
             session.delete(player, userID);
             session.delete(user, userID);
         } catch (Exception e) {
-            throw new UserNotFoundException();
+            e.printStackTrace();
         } finally {
             session.close();
         }
@@ -172,7 +181,6 @@ public class BTRManagerImpl implements BTRManager {
         try {
             session = FactorySession.openSession();
             userID = (Integer) session.getID2(User.class, player.username);
-            log.info("userID= "+userID);
             session.update(player, userID);
             //c = (Player)session.login(Player.class, userID);
         } catch (Exception e) {

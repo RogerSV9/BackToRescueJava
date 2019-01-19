@@ -26,7 +26,7 @@ public class ScoreBoardService {
     @GET
     @ApiOperation(value = "Get scoreboard", notes = "asdasd")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Successful", response = Object.class)
+            @ApiResponse(code = 200, message = "Successful", response = Player.class)
     })
     @Path("/scoreboard")
     @Produces(MediaType.APPLICATION_JSON)
